@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3000;
 
 // Password for login
-const PASSWORD = "admin123";
+const PASSWORD = "123";
 
 // Middleware to parse JSON and serve static files
 app.use(express.json());
