@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM2 Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>PM2 Dashboard</h1>
+    <div id="apps" class="apps-container"></div>
+
+    <script>
+        async function fetchApps() {
+            const res = await fetch('/api/apps', {
+                headers: { 'Authorization': localStorage.getItem('auth') }
+            });
+            if (res.status === 401) {
+                alert('Unauthorized! Redirecting to login.');
+                window.location.href = '/login';
+                return;
+            }
+            const apps = await res.json();
+            const appsContainer = document.getElementById('apps');
+            appsContainer.innerHTML = '';
+            apps.forEach(app => {
+                const appDiv = document.createElement('div');
+                appDiv.className = 'app';
+                appDiv.innerHTML = `
+                    <strong>${app.name}</strong><br>
+                    Status: <span>${app.status}</span><br>
+                    CPU: ${app.cpu}%<br>
+                    Memory: ${app.memory}<br>
+                    <button onclick="startApp(${app.id})">Start</button>
+                    <button onclick="stopApp(${app.id})">Stop</button>
+                `;
+                appsContainer.appendChild(appDiv);
+            });
+        }
+
+        async function startApp(id) {
+            const res = await fetch(`/api/apps/${id}/start`, {
+                method: 'POST',
+                headers: { 'Authorization': localStorage.getItem('auth') }
+            });
+            const message = await res.text();
+            console.log(message);
+            fetchApps();
+        }
+
+        async function stopApp(id) {
+            const res = await fetch(`/api/apps/${id}/stop`, {
+                method: 'POST',
+                headers: { 'Authorization': localStorage.getItem('auth') }
+            });
+            const message = await res.text();
+            console.log(message);
+            fetchApps();
+        }
+
+        fetchApps();
+    </script>
+</body>
+</html>
