@@ -27,7 +27,7 @@
                 const appDiv = document.createElement('div');
                 appDiv.className = 'app';
                 appDiv.innerHTML = `
-                    <strong>${app.name}</strong><br>
+                    <strong>${app.name}</strong> (ID: ${app.id})<br>
                     Status: <span>${app.status}</span><br>
                     CPU: ${app.cpu}%<br>
                     Memory: ${app.memory}<br>
@@ -39,22 +39,20 @@
         }
 
         async function startApp(id) {
-            const res = await fetch(`/api/apps/${id}/start`, {
+            await fetch(`/api/apps/${id}/start`, {
                 method: 'POST',
                 headers: { 'Authorization': localStorage.getItem('auth') }
             });
-            const message = await res.text();
-            console.log(message);
+            console.log(`App with ID ${id} started`);
             fetchApps();
         }
 
         async function stopApp(id) {
-            const res = await fetch(`/api/apps/${id}/stop`, {
+            await fetch(`/api/apps/${id}/stop`, {
                 method: 'POST',
                 headers: { 'Authorization': localStorage.getItem('auth') }
             });
-            const message = await res.text();
-            console.log(message);
+            console.log(`App with ID ${id} stopped`);
             fetchApps();
         }
 
