@@ -3,27 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - PM2 Dashboard</title>
+    <title>Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="login-body">
     <div class="login-container">
-        <h2>Login</h2>
-        <input type="password" id="password" placeholder="Enter password" />
-        <button onclick="login()">Login</button>
+        <h1>PM2 Dashboard Login</h1>
+        <form onsubmit="login(event)">
+            <input type="password" id="password" placeholder="Enter Password" required>
+            <button type="submit">Login</button>
+        </form>
     </div>
 
     <script>
-        function login() {
+        function login(event) {
+            event.preventDefault();
             const password = document.getElementById('password').value;
-            const correctPassword = "admin123"; // The password to be entered
-
-            if (password === correctPassword) {
-                localStorage.setItem('auth', password);
-                window.location.href = '/';
-            } else {
-                alert('Incorrect password');
-            }
+            localStorage.setItem('auth', password);
+            window.location.href = '/';
         }
     </script>
 </body>
